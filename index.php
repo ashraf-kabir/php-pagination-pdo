@@ -38,7 +38,7 @@
             $total_records = $stmt1->rowCount();
 
             $total_no_of_pages = ceil($total_records / $total_records_per_page);
-            $second_last = $total_no_of_pages - 1; // total page minus 1
+            $second_last = $total_no_of_pages - 1;
 
             $sql2 = "SELECT * FROM `posts` LIMIT $offset, $total_records_per_page";
             $stmt2 = $pdo->prepare($sql2);
@@ -134,6 +134,7 @@
             <?php if ($page_no < $total_no_of_pages) {
                 echo "<li><a href='?page_no=$total_no_of_pages'>Last &rsaquo;&rsaquo;</a></li>";
             } ?>
+
         </ul>
         
     </div>
