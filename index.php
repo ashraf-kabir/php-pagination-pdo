@@ -63,7 +63,6 @@
         </div>
 
         <ul class="pagination">
-            <?php // if($page_no > 1){ echo "<li><a href='?page_no=1'>First Page</a></li>"; } ?>
 
             <li <?php if ($page_no <= 1) {
                 echo "class='disabled'";
