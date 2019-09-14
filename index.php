@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Create Simple Pagination Using PHP and MySQLi - AllPHPTricks.com</title>
+    <title>Pagination</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
 
@@ -36,7 +36,6 @@
             $sql1 = "SELECT * FROM posts";
             $stmt1 = $pdo->prepare($sql1);
             $stmt1->execute();
-            $posts1 = $stmt1->fetchAll(PDO::FETCH_OBJ);
             $total_records = $stmt1->rowCount();
 
             $total_no_of_pages = ceil($total_records / $total_records_per_page);
