@@ -1,84 +1,144 @@
-<!doctype html>
-<html lang="en">
+<?php include 'db.php';?>
+<html>
 
 <head>
-    <title>PHP PDO PAGINATION TEST + Auto Refresh Content</title>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"
-        integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
-
-    <!-- CSS for Page Never use like this it is only for test purpose -->
-    <style>
-    body,
-    html {
-        width: 100%;
-        height: 100%;
-    }
-
-    h1 {
-        font-size: 1.2rem;
-        margin-bottom: 2rem;
-        text-align: center;
-    }
-
-    a.pagination-link {
-        display: inline-block;
-        text-align: center;
-    }
-
-    .page-active {
-        background: tomato;
-    }
-    </style>
-
+    <title>Create Simple Pagination Using PHP and MySQLi - AllPHPTricks.com</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
 
 <body>
+    <div style="width:700px; margin:0 auto;">
 
-    <h1>Pagination Test using ajax + auto refesh Content</h1>
-    <!-- Here the Data will be loaded using ajax from data.php -->
-    <div id="load_data"></div>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.js"
-        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"
-        integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous">
-    </script>
-    <script>
-    // Using Ajax to load Data
-    $(document).ready(function() {
-        setTimeout(() => {
-            load_fn_data();
-        }, 1000);
-    });
+        <h3>Demo Create Simple Pagination Using PHP and MySQLi</h3>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th style='width:50px;'>Title</th>
+                    <th style='width:150px;'>Author</th>
+                    <th style='width:50px;'>Body</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
 
-    function load_fn_data(page) {
-        $.ajax({
-            url: "data.php",
-            method: "POST",
-            data: {
-                page: page
-            },
-            success: function(data) {
-                $('#load_data').html(data);
-            }
-        });
+if (isset($_GET['page_no']) && $_GET['page_no'] != "") {
+    $page_no = $_GET['page_no'];
+} else {
+    $page_no = 1;
+}
+
+$total_records_per_page = 3;
+$offset = ($page_no - 1) * $total_records_per_page;
+$previous_page = $page_no - 1;
+$next_page = $page_no + 1;
+$adjacents = "2";
+
+$sql1 = "SELECT * FROM posts";
+$stmt1 = $pdo->prepare($sql1);
+$stmt1->execute();
+$posts1 = $stmt1->fetchAll(PDO::FETCH_OBJ);
+$total_records = $stmt1->rowCount();
+
+$total_no_of_pages = ceil($total_records / $total_records_per_page);
+$second_last = $total_no_of_pages - 1; // total page minus 1
+
+$sql = "SELECT * FROM `posts` LIMIT $offset, $total_records_per_page";
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$posts = $stmt->fetchAll(PDO::FETCH_OBJ);
+$cnt = 1;
+
+if ($stmt->rowCount() > 0) {
+    foreach ($posts as $post) {?>
+                <tr>
+                    <td><?php echo htmlentities($post->title); ?></td>
+                    <td><?php echo htmlentities($post->author); ?></td>
+                    <td><?php echo htmlentities($post->body); ?></td>
+                </tr>
+                <?php $cnt = $cnt + 1;
     }
+}?>
+            </tbody>
+        </table>
 
-    // For Pagination
-    $(document).on('click', '.pagination-link', function() {
-        var page = $(this).attr("id");
-        load_fn_data(page);
-    });
-    </script>
+        <div style='padding: 10px 20px 0px; border-top: dotted 1px #CCC;'>
+            <strong>Page <?php echo $page_no . " of " . $total_no_of_pages; ?></strong>
+        </div>
+
+        <ul class="pagination">
+            <?php // if($page_no > 1){ echo "<li><a href='?page_no=1'>First Page</a></li>"; } ?>
+
+            <li <?php if ($page_no <= 1) {echo "class='disabled'";}?>>
+                <a <?php if ($page_no > 1) {echo "href='?page_no=$previous_page'";}?>>Previous</a>
+            </li>
+
+            <?php
+if ($total_no_of_pages <= 10) {
+    for ($counter = 1; $counter <= $total_no_of_pages; $counter++) {
+        if ($counter == $page_no) {
+            echo "<li class='active'><a>$counter</a></li>";
+        } else {
+            echo "<li><a href='?page_no=$counter'>$counter</a></li>";
+        }
+    }
+} elseif ($total_no_of_pages > 10) {
+
+    if ($page_no <= 4) {
+        for ($counter = 1; $counter < 8; $counter++) {
+            if ($counter == $page_no) {
+                echo "<li class='active'><a>$counter</a></li>";
+            } else {
+                echo "<li><a href='?page_no=$counter'>$counter</a></li>";
+            }
+        }
+        echo "<li><a>...</a></li>";
+        echo "<li><a href='?page_no=$second_last'>$second_last</a></li>";
+        echo "<li><a href='?page_no=$total_no_of_pages'>$total_no_of_pages</a></li>";
+    } elseif ($page_no > 4 && $page_no < $total_no_of_pages - 4) {
+        echo "<li><a href='?page_no=1'>1</a></li>";
+        echo "<li><a href='?page_no=2'>2</a></li>";
+        echo "<li><a>...</a></li>";
+        for ($counter = $page_no - $adjacents; $counter <= $page_no + $adjacents; $counter++) {
+            if ($counter == $page_no) {
+                echo "<li class='active'><a>$counter</a></li>";
+            } else {
+                echo "<li><a href='?page_no=$counter'>$counter</a></li>";
+            }
+        }
+        echo "<li><a>...</a></li>";
+        echo "<li><a href='?page_no=$second_last'>$second_last</a></li>";
+        echo "<li><a href='?page_no=$total_no_of_pages'>$total_no_of_pages</a></li>";
+    } else {
+        echo "<li><a href='?page_no=1'>1</a></li>";
+        echo "<li><a href='?page_no=2'>2</a></li>";
+        echo "<li><a>...</a></li>";
+
+        for ($counter = $total_no_of_pages - 6; $counter <= $total_no_of_pages; $counter++) {
+            if ($counter == $page_no) {
+                echo "<li class='active'><a>$counter</a></li>";
+            } else {
+                echo "<li><a href='?page_no=$counter'>$counter</a></li>";
+            }
+        }
+    }
+}
+?>
+
+            <li <?php if ($page_no >= $total_no_of_pages) {echo "class='disabled'";}?>>
+                <a <?php if ($page_no < $total_no_of_pages) {echo "href='?page_no=$next_page'";}?>>Next</a>
+            </li>
+            <?php if ($page_no < $total_no_of_pages) {
+    echo "<li><a href='?page_no=$total_no_of_pages'>Last &rsaquo;&rsaquo;</a></li>";
+}?>
+        </ul>
+
+
+        <br /><br />
+        <a href="https://www.allphptricks.com/create-simple-pagination-using-php-and-mysqli/"><strong>Tutorial
+                Link</strong></a> <br /><br />
+        For More Web Development Tutorials Visit: <a
+            href="https://www.allphptricks.com/"><strong>AllPHPTricks.com</strong></a>
+    </div>
 </body>
 
 </html>
