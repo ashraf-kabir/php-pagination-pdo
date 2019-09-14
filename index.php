@@ -139,14 +139,7 @@
                 echo "<li><a href='?page_no=$total_no_of_pages'>Last &rsaquo;&rsaquo;</a></li>";
             } ?>
         </ul>
-
-
-        <br/><br/>
-        <a href="https://www.allphptricks.com/create-simple-pagination-using-php-and-mysqli/"><strong>Tutorial
-                                                                                                      Link</strong></a>
-        <br/><br/>
-        For More Web Development Tutorials Visit: <a
-                href="https://www.allphptricks.com/"><strong>AllPHPTricks.com</strong></a>
+        
     </div>
 </body>
 
