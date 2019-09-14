@@ -1,4 +1,4 @@
-<?php include 'db.php';?>
+<?php include 'db.php'; ?>
 <html>
 
 <head>
@@ -9,55 +9,55 @@
 <body>
     <div style="width:700px; margin:0 auto;">
 
-        <h3>Demo Create Simple Pagination Using PHP and MySQLi</h3>
+        <h3>Pagination Using PHP and MySQL PDO</h3>
         <table class="table table-striped table-bordered">
             <thead>
-                <tr>
-                    <th style='width:50px;'>Title</th>
-                    <th style='width:150px;'>Author</th>
-                    <th style='width:50px;'>Body</th>
-                </tr>
+            <tr>
+                <th style='width:50px;'>Title</th>
+                <th style='width:150px;'>Author</th>
+                <th style='width:50px;'>Body</th>
+            </tr>
             </thead>
             <tbody>
-                <?php
+            <?php
 
-if (isset($_GET['page_no']) && $_GET['page_no'] != "") {
-    $page_no = $_GET['page_no'];
-} else {
-    $page_no = 1;
-}
+            if (isset($_GET['page_no']) && $_GET['page_no'] != "") {
+                $page_no = $_GET['page_no'];
+            } else {
+                $page_no = 1;
+            }
 
-$total_records_per_page = 3;
-$offset = ($page_no - 1) * $total_records_per_page;
-$previous_page = $page_no - 1;
-$next_page = $page_no + 1;
-$adjacents = "2";
+            $total_records_per_page = 3;
+            $offset = ($page_no - 1) * $total_records_per_page;
+            $previous_page = $page_no - 1;
+            $next_page = $page_no + 1;
+            $adjacents = "2";
 
-$sql1 = "SELECT * FROM posts";
-$stmt1 = $pdo->prepare($sql1);
-$stmt1->execute();
-$posts1 = $stmt1->fetchAll(PDO::FETCH_OBJ);
-$total_records = $stmt1->rowCount();
+            $sql1 = "SELECT * FROM posts";
+            $stmt1 = $pdo->prepare($sql1);
+            $stmt1->execute();
+            $posts1 = $stmt1->fetchAll(PDO::FETCH_OBJ);
+            $total_records = $stmt1->rowCount();
 
-$total_no_of_pages = ceil($total_records / $total_records_per_page);
-$second_last = $total_no_of_pages - 1; // total page minus 1
+            $total_no_of_pages = ceil($total_records / $total_records_per_page);
+            $second_last = $total_no_of_pages - 1; // total page minus 1
 
-$sql = "SELECT * FROM `posts` LIMIT $offset, $total_records_per_page";
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-$posts = $stmt->fetchAll(PDO::FETCH_OBJ);
-$cnt = 1;
+            $sql = "SELECT * FROM `posts` LIMIT $offset, $total_records_per_page";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $posts = $stmt->fetchAll(PDO::FETCH_OBJ);
+            $cnt = 1;
 
-if ($stmt->rowCount() > 0) {
-    foreach ($posts as $post) {?>
-                <tr>
-                    <td><?php echo htmlentities($post->title); ?></td>
-                    <td><?php echo htmlentities($post->author); ?></td>
-                    <td><?php echo htmlentities($post->body); ?></td>
-                </tr>
-                <?php $cnt = $cnt + 1;
-    }
-}?>
+            if ($stmt->rowCount() > 0) {
+                foreach ($posts as $post) { ?>
+                    <tr>
+                        <td><?php echo htmlentities($post->title); ?></td>
+                        <td><?php echo htmlentities($post->author); ?></td>
+                        <td><?php echo htmlentities($post->body); ?></td>
+                    </tr>
+                    <?php $cnt = $cnt + 1;
+                }
+            } ?>
             </tbody>
         </table>
 
@@ -68,76 +68,85 @@ if ($stmt->rowCount() > 0) {
         <ul class="pagination">
             <?php // if($page_no > 1){ echo "<li><a href='?page_no=1'>First Page</a></li>"; } ?>
 
-            <li <?php if ($page_no <= 1) {echo "class='disabled'";}?>>
-                <a <?php if ($page_no > 1) {echo "href='?page_no=$previous_page'";}?>>Previous</a>
+            <li <?php if ($page_no <= 1) {
+                echo "class='disabled'";
+            } ?>>
+                <a <?php if ($page_no > 1) {
+                    echo "href='?page_no=$previous_page'";
+                } ?>>Previous</a>
             </li>
 
             <?php
-if ($total_no_of_pages <= 10) {
-    for ($counter = 1; $counter <= $total_no_of_pages; $counter++) {
-        if ($counter == $page_no) {
-            echo "<li class='active'><a>$counter</a></li>";
-        } else {
-            echo "<li><a href='?page_no=$counter'>$counter</a></li>";
-        }
-    }
-} elseif ($total_no_of_pages > 10) {
+            if ($total_no_of_pages <= 10) {
+                for ($counter = 1; $counter <= $total_no_of_pages; $counter++) {
+                    if ($counter == $page_no) {
+                        echo "<li class='active'><a>$counter</a></li>";
+                    } else {
+                        echo "<li><a href='?page_no=$counter'>$counter</a></li>";
+                    }
+                }
+            } elseif ($total_no_of_pages > 10) {
 
-    if ($page_no <= 4) {
-        for ($counter = 1; $counter < 8; $counter++) {
-            if ($counter == $page_no) {
-                echo "<li class='active'><a>$counter</a></li>";
-            } else {
-                echo "<li><a href='?page_no=$counter'>$counter</a></li>";
-            }
-        }
-        echo "<li><a>...</a></li>";
-        echo "<li><a href='?page_no=$second_last'>$second_last</a></li>";
-        echo "<li><a href='?page_no=$total_no_of_pages'>$total_no_of_pages</a></li>";
-    } elseif ($page_no > 4 && $page_no < $total_no_of_pages - 4) {
-        echo "<li><a href='?page_no=1'>1</a></li>";
-        echo "<li><a href='?page_no=2'>2</a></li>";
-        echo "<li><a>...</a></li>";
-        for ($counter = $page_no - $adjacents; $counter <= $page_no + $adjacents; $counter++) {
-            if ($counter == $page_no) {
-                echo "<li class='active'><a>$counter</a></li>";
-            } else {
-                echo "<li><a href='?page_no=$counter'>$counter</a></li>";
-            }
-        }
-        echo "<li><a>...</a></li>";
-        echo "<li><a href='?page_no=$second_last'>$second_last</a></li>";
-        echo "<li><a href='?page_no=$total_no_of_pages'>$total_no_of_pages</a></li>";
-    } else {
-        echo "<li><a href='?page_no=1'>1</a></li>";
-        echo "<li><a href='?page_no=2'>2</a></li>";
-        echo "<li><a>...</a></li>";
+                if ($page_no <= 4) {
+                    for ($counter = 1; $counter < 8; $counter++) {
+                        if ($counter == $page_no) {
+                            echo "<li class='active'><a>$counter</a></li>";
+                        } else {
+                            echo "<li><a href='?page_no=$counter'>$counter</a></li>";
+                        }
+                    }
+                    echo "<li><a>...</a></li>";
+                    echo "<li><a href='?page_no=$second_last'>$second_last</a></li>";
+                    echo "<li><a href='?page_no=$total_no_of_pages'>$total_no_of_pages</a></li>";
+                } elseif ($page_no > 4 && $page_no < $total_no_of_pages - 4) {
+                    echo "<li><a href='?page_no=1'>1</a></li>";
+                    echo "<li><a href='?page_no=2'>2</a></li>";
+                    echo "<li><a>...</a></li>";
+                    for ($counter = $page_no - $adjacents; $counter <= $page_no + $adjacents; $counter++) {
+                        if ($counter == $page_no) {
+                            echo "<li class='active'><a>$counter</a></li>";
+                        } else {
+                            echo "<li><a href='?page_no=$counter'>$counter</a></li>";
+                        }
+                    }
+                    echo "<li><a>...</a></li>";
+                    echo "<li><a href='?page_no=$second_last'>$second_last</a></li>";
+                    echo "<li><a href='?page_no=$total_no_of_pages'>$total_no_of_pages</a></li>";
+                } else {
+                    echo "<li><a href='?page_no=1'>1</a></li>";
+                    echo "<li><a href='?page_no=2'>2</a></li>";
+                    echo "<li><a>...</a></li>";
 
-        for ($counter = $total_no_of_pages - 6; $counter <= $total_no_of_pages; $counter++) {
-            if ($counter == $page_no) {
-                echo "<li class='active'><a>$counter</a></li>";
-            } else {
-                echo "<li><a href='?page_no=$counter'>$counter</a></li>";
+                    for ($counter = $total_no_of_pages - 6; $counter <= $total_no_of_pages; $counter++) {
+                        if ($counter == $page_no) {
+                            echo "<li class='active'><a>$counter</a></li>";
+                        } else {
+                            echo "<li><a href='?page_no=$counter'>$counter</a></li>";
+                        }
+                    }
+                }
             }
-        }
-    }
-}
-?>
+            ?>
 
-            <li <?php if ($page_no >= $total_no_of_pages) {echo "class='disabled'";}?>>
-                <a <?php if ($page_no < $total_no_of_pages) {echo "href='?page_no=$next_page'";}?>>Next</a>
+            <li <?php if ($page_no >= $total_no_of_pages) {
+                echo "class='disabled'";
+            } ?>>
+                <a <?php if ($page_no < $total_no_of_pages) {
+                    echo "href='?page_no=$next_page'";
+                } ?>>Next</a>
             </li>
             <?php if ($page_no < $total_no_of_pages) {
-    echo "<li><a href='?page_no=$total_no_of_pages'>Last &rsaquo;&rsaquo;</a></li>";
-}?>
+                echo "<li><a href='?page_no=$total_no_of_pages'>Last &rsaquo;&rsaquo;</a></li>";
+            } ?>
         </ul>
 
 
-        <br /><br />
+        <br/><br/>
         <a href="https://www.allphptricks.com/create-simple-pagination-using-php-and-mysqli/"><strong>Tutorial
-                Link</strong></a> <br /><br />
+                                                                                                      Link</strong></a>
+        <br/><br/>
         For More Web Development Tutorials Visit: <a
-            href="https://www.allphptricks.com/"><strong>AllPHPTricks.com</strong></a>
+                href="https://www.allphptricks.com/"><strong>AllPHPTricks.com</strong></a>
     </div>
 </body>
 
