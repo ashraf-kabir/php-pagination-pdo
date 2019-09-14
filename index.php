@@ -9,18 +9,17 @@
 <body>
     <div style="width:700px; margin:0 auto;">
 
-        <h3>Pagination Using PHP and MySQL PDO</h3>
+        <h3 style="text-align: center;">Pagination Using PHP and MySQL PDO</h3>
         <table class="table table-striped table-bordered">
             <thead>
             <tr>
-                <th style='width:50px;'>Title</th>
-                <th style='width:150px;'>Author</th>
-                <th style='width:50px;'>Body</th>
+                <th style='width:100px;'>Title</th>
+                <th style='width:100px;'>Author</th>
+                <th style='width:100px;'>Body</th>
             </tr>
             </thead>
             <tbody>
             <?php
-
             if (isset($_GET['page_no']) && $_GET['page_no'] != "") {
                 $page_no = $_GET['page_no'];
             } else {
@@ -41,18 +40,17 @@
             $total_no_of_pages = ceil($total_records / $total_records_per_page);
             $second_last = $total_no_of_pages - 1; // total page minus 1
 
-            $sql = "SELECT * FROM `posts` LIMIT $offset, $total_records_per_page";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute();
-            $posts = $stmt->fetchAll(PDO::FETCH_OBJ);
+            $sql2 = "SELECT * FROM `posts` LIMIT $offset, $total_records_per_page";
+            $stmt2 = $pdo->prepare($sql2);
+            $stmt2->execute();
+            $results = $stmt2->fetchAll(PDO::FETCH_OBJ);
             $cnt = 1;
-
-            if ($stmt->rowCount() > 0) {
-                foreach ($posts as $post) { ?>
+            if ($stmt2->rowCount() > 0) {
+                foreach ($results as $result) { ?>
                     <tr>
-                        <td><?php echo htmlentities($post->title); ?></td>
-                        <td><?php echo htmlentities($post->author); ?></td>
-                        <td><?php echo htmlentities($post->body); ?></td>
+                        <td><?php echo htmlentities($result->title); ?></td>
+                        <td><?php echo htmlentities($result->author); ?></td>
+                        <td><?php echo htmlentities($result->body); ?></td>
                     </tr>
                     <?php $cnt = $cnt + 1;
                 }
