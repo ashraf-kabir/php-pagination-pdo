@@ -82,7 +82,6 @@
                     }
                 }
             } elseif ($total_no_of_pages > 10) {
-
                 if ($page_no <= 4) {
                     for ($counter = 1; $counter < 8; $counter++) {
                         if ($counter == $page_no) {
@@ -112,7 +111,6 @@
                     echo "<li><a href='?page_no=1'>1</a></li>";
                     echo "<li><a href='?page_no=2'>2</a></li>";
                     echo "<li><a>...</a></li>";
-
                     for ($counter = $total_no_of_pages - 6; $counter <= $total_no_of_pages; $counter++) {
                         if ($counter == $page_no) {
                             echo "<li class='active'><a>$counter</a></li>";
