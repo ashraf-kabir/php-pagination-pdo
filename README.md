@@ -1,2 +1,2 @@
 # pagination
- php pagination with MySql PDO
+ php PDO pagination with MySql
