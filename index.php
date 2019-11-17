@@ -33,7 +33,7 @@
             $next_page = $page_no + 1;
             $adjacents = "2";
 
-            $sql1 = "SELECT * FROM posts";
+            $sql1 = "SELECT * FROM `posts`";
             $stmt1 = $pdo->prepare($sql1);
             $stmt1->execute();
             $total_records = $stmt1->rowCount();
