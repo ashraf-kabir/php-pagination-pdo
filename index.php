@@ -2,14 +2,14 @@
 <html>
 
 <head>
-    <title>Pagination</title>
+    <title>PHP Pagination</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
 
 <body>
     <div style="width:700px; margin:0 auto;">
 
-        <h3 style="text-align: center;">Pagination Using PHP and MySQL PDO</h3>
+        <h3 style="text-align: center;">Pagination Using PHP PDO and MySQL</h3>
         <table class="table table-striped table-bordered">
             <thead>
             <tr>
