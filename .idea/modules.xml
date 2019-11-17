@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/pagination.iml" filepath="$PROJECT_DIR$/.idea/pagination.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/php-pagination-pdo.iml" filepath="$PROJECT_DIR$/.idea/php-pagination-pdo.iml" />
     </modules>
   </component>
 </project>
