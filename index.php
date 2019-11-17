@@ -10,6 +10,7 @@
     <div style="width:700px; margin:0 auto;">
 
         <h3 style="text-align: center;">Pagination Using PHP PDO and MySQL</h3>
+        <br>
         <table class="table table-striped table-bordered">
             <thead>
             <tr>
