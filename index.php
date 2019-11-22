@@ -64,7 +64,6 @@
         </div>
 
         <ul class="pagination">
-
             <li <?php if ($page_no <= 1) {
                 echo "class='disabled'";
             } ?>>
@@ -133,7 +132,6 @@
             <?php if ($page_no < $total_no_of_pages) {
                 echo "<li><a href='?page_no=$total_no_of_pages'>Last &rsaquo;&rsaquo;</a></li>";
             } ?>
-
         </ul>
         
     </div>
